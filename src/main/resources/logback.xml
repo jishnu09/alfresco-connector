@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="DEV_HOME" value="/alfresco-connector/logs" />
+
+    <appender name="FILE-AUDIT"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+	         <level>INFO</level>	         
+        </filter>
+        <file>${DEV_HOME}/alfresco-connector-logback.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                <!--				%d{yyyy-MM-dd HH:mm:ss} - %msg%n-->
+                %boldBlue(%d{yyyy-MM-dd HH:mm:ss}) - %highlight(%-5level) %green([%thread]) %cyan(%logger) %magenta(.%M:%line) - %msg%n
+            </Pattern>
+        </encoder>
+        
+<!--        <withJansi>true</withJansi>-->
+        
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${DEV_HOME}/archived/alfresco-connector-logback.%d{yyyy-MM-dd}.log.zip
+            </fileNamePattern>
+<!--            <maxFileSize>1MB</maxFileSize>-->
+<!--            <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <maxFileSize>1MB</maxFileSize>
+                
+            </timeBasedFileNamingAndTriggeringPolicy>-->
+        </rollingPolicy>
+
+    </appender>
+    <appender name="FILE-AUDIT-DEBUG"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        
+        
+        
+        <file>${DEV_HOME}/alfresco-connector-logback-debug.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                <!--				%d{yyyy-MM-dd HH:mm:ss} - %msg%n-->
+                %boldBlue(%d{yyyy-MM-dd HH:mm:ss}) - %highlight(%-5level) [%thread] %cyan(%logger) %magenta(.%M:%line) - %msg%n
+            </Pattern>
+        </encoder>
+        
+<!--        <withJansi>true</withJansi>-->
+        
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${DEV_HOME}/archived/alfresco-connector-logback-debug.%d{yyyy-MM-dd}.log.zip
+            </fileNamePattern>
+            
+<!--            <maxFileSize>1MB</maxFileSize>-->
+<!--            <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <maxFileSize>1MB</maxFileSize>
+                
+            </timeBasedFileNamingAndTriggeringPolicy>-->
+        </rollingPolicy>
+
+    </appender>
+    
+    <appender name="FILE_HTML" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.classic.html.HTMLLayout">
+                <pattern>
+                    <!--                    %relative%thread%mdc%level%logger%msg-->
+                    %d{yyyy-MM-dd HH:mm:ss}%-5level%logger%msg%n
+                </pattern>
+            </layout>
+        </encoder>
+        <!--        <withJansi>true</withJansi>-->
+        <file>${DEV_HOME}/alfresco-connector-logback.html</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${DEV_HOME}/archived/alfresco-connector-logback.%d{yyyy-MM-dd}.html.zip
+            </fileNamePattern>
+            
+<!--            <maxFileSize>1MB</maxFileSize>-->
+<!--            <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <maxFileSize>1MB</maxFileSize>
+                
+            </timeBasedFileNamingAndTriggeringPolicy>-->
+        </rollingPolicy>
+    </appender>
+    
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator class="com.mcube.automation.utils.ThreadNameBasedDiscriminator"/>
+        <sift>
+            <appender class="ch.qos.logback.core.FileAppender">
+                <file>${DEV_HOME}/alfresco-connector-logback-${threadName}.log</file>
+                <layout class="ch.qos.logback.classic.PatternLayout">
+                    %boldBlue(%d{yyyy-MM-dd HH:mm:ss}) - %highlight(%-5level) %green([%thread]) %cyan(%logger) %magenta(.%M:%line) - %msg%n
+                </layout>
+            </appender>
+        </sift>
+    </appender>
+    
+    <appender name="REFERER_LOG"
+              class="ch.qos.logback.classic.sift.SiftingAppender">
+        <!--              class="ch.qos.logback.access.rolling.RollingFileAppender">-->
+        <file>${DEV_HOME}/alfresco-connector-logback-referrer.log</file>
+        <!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <layout class="ch.qos.logback.access.PatternLayout">
+                <Pattern>%h %l %u %t "%r" %s %b "%i{Referer}" "%i{User-Agent}"</Pattern>
+            </layout>
+        </encoder>-->
+        <encoder class="ch.qos.logback.access.PatternLayoutEncoder">
+            <layout class="ch.qos.logback.access.PatternLayout">
+                <Pattern>%mdc{req.remoteHost} %mdc{req.xForwardedFor} %mdc{req.userAgent} %mdc{req.requestURI}%n%d - %m%n</Pattern>
+            </layout>
+        </encoder>
+    </appender>
+    
+    <appender name="STDOUT"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+        <!--            <layout class="ch.qos.logback.access.PatternLayout">-->
+        <!--                <Pattern>%h %l %u %t "%r" %s %b "%i{Referer}" "%i{User-Agent}"</Pattern>-->
+        <encoder class="ch.qos.logback.access.PatternLayoutEncoder">
+            <layout class="ch.qos.logback.access.PatternLayout">
+                <Pattern>%mdc{req.remoteHost} %mdc{req.xForwardedFor} %mdc{req.userAgent} %mdc{req.requestURI}%n%d - %m%n</Pattern>
+            </layout>
+        </encoder>
+        <!--        </encoder>-->
+    </appender>
+
+    <!--    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+         rollover daily 
+        <fileNamePattern>${DEV_HOME}/archived/alfresco-connector-logback.%d{yyyy-MM-dd}.%i.html
+        </fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy
+            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <maxFileSize>10MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>-->
+
+    <!--	<logger level="info"
+            additivity="false">
+            <appender-ref ref="FILE-AUDIT" />
+    </logger>-->
+    <!--    <logger name="alfresco-connector" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE-AUDIT-DEBUG"/>
+    </logger>-->
+    <appender name="FILE_APPENDER" class="ch.qos.logback.core.FileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+	         <level>INFO</level>	         
+        </filter>
+        <file>${DEV_HOME}/alfresco-connector-logback-mdc.log</file>
+        <!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%mdc{req.remoteHost} %mdc{req.xForwardedFor} %mdc{req.browserDetails} %n%d - %m%n</Pattern>
+        </layout>
+        <!--        </encoder> -->
+    </appender>  
+    
+    <root level="debug">
+        <appender-ref ref="FILE-AUDIT" />
+        <!-- <appender-ref ref="FILE-AUDIT-DEBUG" /> -->
+        <!--<appender-ref ref="REFERER_LOG" />-->
+        <appender-ref ref="FILE_APPENDER" />
+        <!--        <appender-ref ref="STDOUT" />-->
+        <!--        <appender-ref ref="FILE_HTML" />     -->
+        <!--        <appender-ref ref="SIFT" />     -->
+    </root>
+    
+    <!--    <root level="debug">
+        <appender-ref ref="FILE-AUDIT-DEBUG" />        
+    </root>-->
+   
+
+</configuration>
